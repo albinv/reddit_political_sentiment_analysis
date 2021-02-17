@@ -1,18 +1,19 @@
+import pickle
 LINES_PER_FILE = 500
 
 
-def write_to_files(all_comments, filename="comments"):
-    current_filename = filename + "_1"
+def convert_filename_to_dir(filename):
+    return "../data/"+filename
 
-    if len(all_comments) > LINES_PER_FILE:
-        comments = all_comments
-        with open(filename, 'w') as f:
-            for i in range(LINES_PER_FILE):
-                f.write("%s\n" % comments[0])
-                comments.pop()
-            f.close()
-        write_to_files(comments, filename)
-    else:
-        with open(filename, 'w') as f:
-            for comment in all_comments:
-                f.write("%s\n" % comment)
+
+def write_to_file(all_comments, filename="comments"):
+    current_filename = convert_filename_to_dir(filename)
+    with open(current_filename, 'wb') as file:
+        pickle.dump(all_comments, file)
+
+
+def read_from_file(filename):
+    current_filename = convert_filename_to_dir(filename)
+    with open(current_filename, 'rb') as file:
+        data_list = pickle.load(file)
+        return data_list

@@ -1,12 +1,14 @@
 import praw
 
+NUM_POSTS_LIMIT = 1  # max = 100
+
 
 # todo: support for more than 100 posts
-def get_submission_from_subreddit(reddit, subreddit_name, num_posts=1):
+def get_submission_from_subreddit(reddit, subreddit_name):
     """ Returns a list of submission objects found on the specified subreddit """
     # sorters -> relevance, hot, top, new, comments
     # max limit current = 100
-    return reddit.subreddit(subreddit_name).hot(limit=num_posts)
+    return reddit.subreddit(subreddit_name).hot(limit=NUM_POSTS_LIMIT)
 
 
 def get_all_comments(comments):
@@ -60,10 +62,9 @@ def get_all_comments_from_subreddit(reddit, subreddit_name):
     return list(comments_acc)
 
 
-redditInstance = praw.Reddit(
-    client_id="jshyL9CMgH5nEg",
-    client_secret="WEHm5M9WLUd7PzjzydlUUKiHSH1vnw",
-    user_agent="sentiment_analysis by u/albinv1")
-
-for elem in get_all_comments_from_subreddit(redditInstance, "learnpython"):
-    print(elem)
+def get_reddit_instance():
+    return praw.Reddit(
+        client_id="jshyL9CMgH5nEg",
+        client_secret="WEHm5M9WLUd7PzjzydlUUKiHSH1vnw",
+        user_agent="sentiment_analysis by u/albinv1"
+    )
