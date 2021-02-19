@@ -19,7 +19,10 @@ def get_all_comments(comments):
         return get_all_comments(comments.comments())
     elif isinstance(comments, praw.models.reddit.comment.Comment):
         replies = comments.replies
-        return [comments.body, get_all_comments(replies)]
+        author = None
+        if comments.author:
+            author = comments.author.name
+        return [(comments.body, author), get_all_comments(replies)]
     elif isinstance(comments, praw.models.comment_forest.CommentForest):
         combined = []
         for comment in (comments.list()):
@@ -39,7 +42,7 @@ def flatten_list(elem):
     """ a better flat_list() function than pythons default implementation for this specific use case """
     if not elem:
         return []
-    elif isinstance(elem, str):
+    elif isinstance(elem, tuple):
         return [elem]
     elif isinstance(elem, list):
         combined = []

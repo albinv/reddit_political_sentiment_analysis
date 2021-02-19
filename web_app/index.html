@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Page Description -->
+    <meta name="description" content="A Dashboard for political sentiment analysis in Reddit">
+    <meta name="author" content="Albin Vincent">
+    <title>Reddit Political Sentiment Analysis Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <script src="https://kit.fontawesome.com/b4a1f7d2b1.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script type="text/javascript" src="js/reddit.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar text-light bg-primary pt-0 justify-content-between">
+      <span class="navbar-brand "> Reddit Political Sentiment Analysis </span>
+      <a class="nav-link text-light" href="https://github.com/albinv/reddit_political_sentiment_analysis">View Github repo</a>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-2">
+          <div class="nav flex-column nav-pills pt-1" id="v-pills" role="tablist" aria-orientation="vertical">
+            <a class="nav-link disabled" >Options:</a>
+            <a class="pt-2">
+              <form class="form-inline">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <select class="form-select" id="search_select" onchange="update_search_box_hint()" aria-label="select option">
+                      <option value="subreddit" selected>Subreddit Search:</option>
+                      <option value="username">Username Search:</option>
+                    </select>
+                  </div>
+                  <input type="text" class="form-control" id="name_input" aria-label="enter name">
+                </div>
+              </form>
+            </a>
+            <a class="pt-1">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Sort:</span>
+                </div>
+                <select class="form-select" aria-label="sort_select">
+                  <option value="relevance" selected>Relevance</option>
+                  <option value="hot">Hot</option>
+                  <option value="top">Top</option>
+                  <option value="new">New</option>
+                </select>
+              </div>
+            </a>
+            <a class="pt-1">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Number of posts to fetch:</span>
+                </div>
+                <input type="number" min="1" max="100" class="form-control" value="5" title="MAX=100" id="no_of_posts" aria-label="Enter number of posts to fetch">
+              </div>
+            </a>
+            <a class="pt-5"><button type="submit" class="btn btn-primary" onclick="get_post()">           1. Get Posts / Make Files</button></a>
+            <a class="pt-1"><button type="submit" class="btn btn-primary" onclick="view_comments()">      2. View Comments</button></a>
+            <a class="pt-1"><button type="submit" class="btn btn-primary" onclick="load_visualisations()">3. Analyse Comments</button></a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="card-body">
+            <h5 class="card-title">Reddit Analysis / Charts & Graphs</h5>
+            <p class="card-text">This is where the Visualisations will be..... </p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+

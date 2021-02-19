@@ -1,5 +1,4 @@
 import pickle
-LINES_PER_FILE = 500
 
 
 def convert_filename_to_dir(filename):

@@ -1,0 +1,7 @@
+praw~=7.1.4
+pyspark~=3.0.1
+py4j~=0.10.7
+pypandoc~=1.5
+setuptools~=40.6.2
+Flask~=1.1.2
+numpy~=1.19.5
