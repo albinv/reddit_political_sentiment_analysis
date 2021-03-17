@@ -9,6 +9,7 @@
     <meta name="author" content="Albin Vincent">
     <title>Reddit Political Sentiment Analysis Dashboard</title>
     <!-- Bootstrap CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/b4a1f7d2b1.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script type="text/javascript" src="js/reddit.js"></script>
@@ -42,10 +43,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Sort:</span>
                 </div>
-                <select class="form-select" aria-label="sort_select">
-                  <option value="relevance" selected>Relevance</option>
+                <select class="form-select" id="sort_select" aria-label="sort_select">
                   <option value="hot">Hot</option>
-                  <option value="top">Top</option>
+                  <option value="top" selected>Top</option>
                   <option value="new">New</option>
                 </select>
               </div>
@@ -55,19 +55,34 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Number of posts to fetch:</span>
                 </div>
-                <input type="number" min="1" max="100" class="form-control" value="5" title="MAX=100" id="no_of_posts" aria-label="Enter number of posts to fetch">
+                <input type="number" min="1" max="100" class="form-control" value="1" title="MAX=100" id="no_of_posts" aria-label="Enter number of posts to fetch">
               </div>
             </a>
-            <a class="pt-5"><button type="submit" class="btn btn-primary" onclick="get_post()">           1. Get Posts / Make Files</button></a>
+            <a class="pt-1">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="nested_replies_checkbox" title="WARNING: If checked, will take a lot longer to get all the comments!!">
+                <label class="form-check-label" for="nested_replies_checkbox">get nested replies?</label>
+              </div>
+            </a>
+
+            <a class="pt-5"><button type="submit" class="btn btn-primary" onclick="get_posts()">          1. Get Posts & Make Files</button></a>
             <a class="pt-1"><button type="submit" class="btn btn-primary" onclick="view_comments()">      2. View Comments</button></a>
             <a class="pt-1"><button type="submit" class="btn btn-primary" onclick="load_visualisations()">3. Analyse Comments</button></a>
           </div>
         </div>
         <div class="col-8">
-          <div class="card-body">
-            <h5 class="card-title">Reddit Analysis / Charts & Graphs</h5>
-            <p class="card-text">This is where the Visualisations will be..... </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="row" id="status_msg_div"></div>
+          <div class="row">
+
+            <table class="table" id="comments_table"></table>
+
+            <div class="card-body">
+              <h5 class="card-title">Reddit Analysis / Charts & Graphs</h5>
+              <p class="card-text">This is where the Visualisations will be..... </p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+
+
           </div>
         </div>
       </div>
