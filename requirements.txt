@@ -5,3 +5,7 @@ pypandoc~=1.5
 setuptools~=40.6.2
 Flask~=1.1.2
 numpy~=1.19.5
+tensorflow~=2.4.1
+matplotlib~=3.3.4
+cryptography~=3.4.6
+bokeh~=2.3.1

@@ -1,8 +1,10 @@
 import praw
+from config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 
 
-def get_all_comments_from_subreddit(reddit, subreddit_name, num_posts=1, sort_order="top", all_replies=False):
-    """ Given a reddit instance and a subreddit name, will fetch all comments from there"""
+def get_all_comments_from_subreddit(subreddit_name, num_posts=1, sort_order="top", all_replies=False):
+    """ Given a subreddit name, will fetch all comments from there """
+    reddit = get_reddit_instance()
     comments_acc = set()
     for submission in get_submission_from_subreddit(reddit, subreddit_name, num_posts, sort_order):
         if all_replies:
@@ -12,18 +14,36 @@ def get_all_comments_from_subreddit(reddit, subreddit_name, num_posts=1, sort_or
     return list(comments_acc)
 
 
+def get_all_comments_from_user(username, num_comments=25):
+    """ Given a username, will fetch the speciefied number of comments for the user """
+    reddit = get_reddit_instance()
+    redditor = reddit.redditor(username)
+    if num_comments == 0:
+        num_comments = None
+    all_comments = []
+    comments = redditor.comments.new(limit=num_comments)
+    for comment in comments:
+        if comment.body:
+            all_comments.append([comment.body, comment.subreddit.display_name])
+    submissions = redditor.submissions.new(limit=num_comments)
+    for submission in submissions:
+        comment = submission.title
+        if submission.selftext:
+            comment = comment + " " + submission.selftext
+        all_comments.append([comment, submission.subreddit.display_name])
+    return all_comments
+
+
 def get_reddit_instance():
     return praw.Reddit(
-        client_id="jshyL9CMgH5nEg",
-        client_secret="WEHm5M9WLUd7PzjzydlUUKiHSH1vnw",
-        user_agent="sentiment_analysis by u/albinv1"
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        user_agent=USER_AGENT
     )
 
 
-# todo: support for more than 100 posts
 def get_submission_from_subreddit(reddit, subreddit_name, num_posts=1, sort_order="top"):
     """ Returns a list of submission objects found on the specified subreddit """
-    # max limit current = 100
     submissions = reddit.subreddit(subreddit_name)
     if sort_order == "top":
         return submissions.top(limit=num_posts)
@@ -35,6 +55,7 @@ def get_submission_from_subreddit(reddit, subreddit_name, num_posts=1, sort_orde
 
 def get_all_comments(comments):
     """ Given a comment object (i.e CommentForest), outputs a list of all the comments in there """
+    from utils import quick_encrypt
     if comments is None:
         return []
     elif isinstance(comments, praw.models.reddit.more.MoreComments):
@@ -43,7 +64,7 @@ def get_all_comments(comments):
         replies = comments.replies
         author = None
         if comments.author:
-            author = comments.author.name
+            author = quick_encrypt(comments.author.name)
         return [(comments.body, author), get_all_comments(replies)]
     elif isinstance(comments, praw.models.comment_forest.CommentForest):
         combined = []
@@ -63,6 +84,7 @@ def get_all_comments(comments):
 def get_comments(comments):
     """ Given a comment object (i.e CommentForest), outputs a list of all the comments in there excluding the
     MoreComment objects and replies """
+    from utils import quick_encrypt
     if comments is None:
         return []
     elif isinstance(comments, praw.models.reddit.more.MoreComments):
@@ -70,7 +92,7 @@ def get_comments(comments):
     elif isinstance(comments, praw.models.reddit.comment.Comment):
         author = None
         if comments.author:
-            author = comments.author.name
+            author = quick_encrypt(comments.author.name)
         return [(comments.body, author)]
     elif isinstance(comments, praw.models.comment_forest.CommentForest):
         combined = []

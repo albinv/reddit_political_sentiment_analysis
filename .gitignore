@@ -2,3 +2,5 @@
 nohup.out
 src/__pycache__
 data/*
+.DS_Store
+venv/
