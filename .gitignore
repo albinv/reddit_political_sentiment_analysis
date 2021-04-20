@@ -4,3 +4,4 @@ src/__pycache__
 data/*
 .DS_Store
 venv/
+src/political_sentiment_model
