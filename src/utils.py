@@ -8,20 +8,24 @@ import re
 
 
 def clean_comment(comment):
+    # regex to filter out things lik links and make surer no weird symbols exist in the comment
     return re.sub(r"(https?://|www)\S+|\w*\d\w*|[^A-Za-z\s.,'’?]+", "", comment)
 
 
 def perform_preprocessing(comments_list):
+    # clean comment and remove stopwords from it
     cleaned_comments = []
     for comment in comments_list:
         cleaned_comment = clean_comment(comment)
         all_lowercase = cleaned_comment.lower()
+        # list comprehension to remove all stopwords found in the config file from the comment
         removed_stopwords = [word for word in all_lowercase.split() if word not in NLTK_STOPWORDS]
         cleaned_comments.append(' '.join(removed_stopwords))
     return cleaned_comments
 
 
 def get_comments_and_make_file_from_subreddit(subreddit_name, num_posts, sort_order, through_search):
+    # write the comments found using the subreddit search function to a file
     filename = concat_file_properties_to_filename([subreddit_name, num_posts, sort_order])
     file_contents = read_from_file(filename)
     if not file_contents:
@@ -30,6 +34,7 @@ def get_comments_and_make_file_from_subreddit(subreddit_name, num_posts, sort_or
 
 
 def get_comments_and_make_file_from_username(username, num_comments, encrypted_username):
+    # write the comments found using the username search function to a file
     filename = concat_file_properties_to_filename([username, num_comments, str(encrypted_username)])
     file_contents = read_from_file(filename)
     if not file_contents:
@@ -40,27 +45,32 @@ def get_comments_and_make_file_from_username(username, num_comments, encrypted_u
 
 
 def view_comments(subreddit_name, num_posts, sort_order):
+    # get the comments in the file, found using the name and the search params inputted
     filename = concat_file_properties_to_filename([subreddit_name, num_posts, sort_order])
     return read_from_file(filename)
 
 
 def make_key():
+    # generate a key for encryption
     return Fernet.generate_key()
 
 
 def quick_encrypt(msg):
+    # encrypt the msg using the key found in the comments
     encoded_msg = msg.encode()
     fernet = Fernet(SAFE_KEY)
     return fernet.encrypt(encoded_msg).decode("utf-8")
 
 
 def quick_decrypt(msg):
+    # decrypt the msg using the key found in the comments
     encrypted = msg.encode()
     fernet = Fernet(SAFE_KEY)
     return fernet.decrypt(encrypted).decode("utf-8")
 
 
 def make_sentiment_visual(comments_with_predictions, type, name):
+    # plot the visual of the political sentiment analysis using the bokeh plot
     title = "Political Sentiment Analysis performed "
     if type == "subreddit":
         title += "on the Subreddit: r/" + name

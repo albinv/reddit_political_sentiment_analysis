@@ -13,9 +13,14 @@ MAX_LEN = 500
 
 
 def fetch_training_comments():
+    """ Fetches all thee left and right wing comments from the specified subreddit list found
+       in the config file for training purposes """
+
+    # the comments data structure as a set to avoid duplicate comments
     left_wing_comments = set()
     right_wing_comments = set()
 
+    # Fetch comments for both left and right wing comments from reddit
     for data_entry in LEFT_TRAINING_DATA:
         print("\n\nFetching data from reddit for left training: ")
         print(data_entry)
@@ -42,6 +47,7 @@ def fetch_training_comments():
 
 
 def combine_left_right_views(left, right):
+    """ add values to the comments i.e 0 for left and 1 for right wing comments """
     new_left = []
     for elem in left:
         new_left.append([elem, 0])
@@ -50,7 +56,7 @@ def combine_left_right_views(left, right):
     for elem in right:
         new_right.append([elem, 1])
 
-    combined = new_left+new_right
+    combined = new_left + new_right
     # shuffle for more accuracy when doing thr training
     shuffle(combined)
 
@@ -64,16 +70,19 @@ def combine_left_right_views(left, right):
 
 
 def train_model(left_wing_comments, right_wing_comments):
+    # clean comments
     cleaned_left = perform_preprocessing(left_wing_comments)
     cleaned_right = perform_preprocessing(right_wing_comments)
+    # add 0,1 values to left and right wing comments
     comments, labels = combine_left_right_views(cleaned_left, cleaned_right)
-
+    # get the training size needed
     training_size = int(len(comments) * TRAINING_VALIDATION_SPLIT)
+    # split training data and labels according to the split specified in the comments
     training_comments = comments[0:training_size]
     testing_comments = comments[training_size:]
     training_labels = labels[0:training_size]
     testing_labels = labels[training_size:]
-
+    # initialise the tokenizer
     tokenizer = Tokenizer(oov_token="<OOV>")
     tokenizer.fit_on_texts(training_comments)
 
@@ -107,6 +116,7 @@ def train_model(left_wing_comments, right_wing_comments):
 
 
 def plot_training_results_graph(history, string):
+    """ Plot results graph showing accuracy and loss """
     plt.plot(history.history[string])
     plt.plot(history.history['val_' + string])
     plt.xlabel("Epochs")
@@ -116,6 +126,8 @@ def plot_training_results_graph(history, string):
 
 
 def get_political_sentiment_prediction(comments_list):
+    """ Given a comments list, append a sentiment value onto it """
+    # use the preexisting model created to perform the sentiment analysis
     model = tf.keras.models.load_model(MODEL_SAVE_NAME)
     tokenizer = read_from_file(TOKENIZER_SAVE_NAME)
     new_comments_list = []

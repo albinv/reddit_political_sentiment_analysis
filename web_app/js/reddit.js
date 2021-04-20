@@ -5,6 +5,7 @@ window.onload = function(){
 };
 
 function update_for_search_type(){
+    // changes needed on change of the Subreddit search and username search options
     let current_selection = document.getElementById("search_select").value
     switch (current_selection){
         case "subreddit":
@@ -32,6 +33,7 @@ function update_for_search_type(){
 }
 
 function check_input_for_errors(){
+    // checks all the input fields for errors
     let errors = false;
     let reddit_name = document.getElementById("name_input").value;
     if (reddit_name == null || reddit_name === "") {
@@ -62,6 +64,7 @@ function check_input_for_errors(){
 }
 
 function get_all_data_fields(){
+    // return a json string for all the data inputted on the form
     let name = document.getElementById("name_input").value
     let num_posts = document.getElementById("no_of_posts").value
     let sort_order = document.getElementById("sort_select").value
@@ -80,6 +83,7 @@ function get_all_data_fields(){
 }
 
 function get_posts(){
+    // the function for the get posts button, sends the get request to the backend api with the specified parameters
     if (!check_input_for_errors()) {
         let search_type = document.getElementById("search_select").value
         let request_url = backend_server_address + "get_comments_by_" + search_type
@@ -107,6 +111,7 @@ function get_posts(){
 }
 
 function view_comments(){
+    // sends the 'view comments' request to the backend api and displays the results in a table
     if (!check_input_for_errors()){
         let search_type = document.getElementById("search_select").value
         let request_url = backend_server_address + "view_comments_" + search_type
@@ -138,6 +143,7 @@ function view_comments(){
 }
 
 function load_visualisations(){
+    // when the analyse comments button is pressed, send the request to the backend api and load the results into a table
     if (!check_input_for_errors()){
         let search_type = document.getElementById("search_select").value
         let request_url = backend_server_address + "analyse_comments_" + search_type

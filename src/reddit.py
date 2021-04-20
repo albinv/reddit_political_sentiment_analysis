@@ -4,9 +4,11 @@ from config import CLIENT_ID, CLIENT_SECRET, USER_AGENT
 
 def get_all_comments_from_subreddit(subreddit_name, num_posts=1, sort_order="top", all_replies=False):
     """ Given a subreddit name, will fetch all comments from there """
+    # get a new instance of an api connection to reddit using the PRAW api
     reddit = get_reddit_instance()
     comments_acc = set()
     for submission in get_submission_from_subreddit(reddit, subreddit_name, num_posts, sort_order):
+        # get comments and also get nested replies if that option was selected on the frontend
         if all_replies:
             comments_acc.update(flatten_list(get_all_comments(submission.comments)))
         else:
@@ -16,11 +18,14 @@ def get_all_comments_from_subreddit(subreddit_name, num_posts=1, sort_order="top
 
 def get_all_comments_from_user(username, num_comments=25):
     """ Given a username, will fetch the speciefied number of comments for the user """
+    # get a new instance of an api connection to reddit using the PRAW api
     reddit = get_reddit_instance()
+    # a quick reference for the reddit user object
     redditor = reddit.redditor(username)
     if num_comments == 0:
         num_comments = None
     all_comments = []
+    # all comments = users comments in other subreddits + users posts
     comments = redditor.comments.new(limit=num_comments)
     for comment in comments:
         if comment.body:
@@ -28,6 +33,7 @@ def get_all_comments_from_user(username, num_comments=25):
     submissions = redditor.submissions.new(limit=num_comments)
     for submission in submissions:
         comment = submission.title
+        # if the comment has a bit underneath the tile explaining the comment add this in as well
         if submission.selftext:
             comment = comment + " " + submission.selftext
         all_comments.append([comment, submission.subreddit.display_name])
@@ -35,6 +41,7 @@ def get_all_comments_from_user(username, num_comments=25):
 
 
 def get_reddit_instance():
+    # initialise a praw reddit instance with the login details found in the config
     return praw.Reddit(
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
@@ -55,6 +62,7 @@ def get_submission_from_subreddit(reddit, subreddit_name, num_posts=1, sort_orde
 
 def get_all_comments(comments):
     """ Given a comment object (i.e CommentForest), outputs a list of all the comments in there """
+    # dynamic function to extract all comments from the tree structure
     from utils import quick_encrypt
     if comments is None:
         return []
