@@ -98,14 +98,15 @@ def train_model(left_wing_comments, right_wing_comments):
     model = tf.keras.Sequential([
         tf.keras.layers.Embedding(100000, 64, input_length=MAX_LEN),
         tf.keras.layers.GlobalAveragePooling1D(),
-        tf.keras.layers.Dense(24, activation='relu'),
+        tf.keras.layers.Dense(24, activation='relu', kernel_regularizer=tf.keras.regularizers.L2(0.001)),
+        tf.keras.layers.Dropout(0.6),
         tf.keras.layers.Dense(1, activation='sigmoid')
     ])
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     model.summary()
 
     # Train Model
-    history = model.fit(np.array(training_padded), np.array(training_labels), epochs=30,
+    history = model.fit(np.array(training_padded), np.array(training_labels), epochs=20,
                         validation_data=(np.array(testing_padded), np.array(testing_labels)), verbose=2, shuffle=True)
 
     # save model for future use
