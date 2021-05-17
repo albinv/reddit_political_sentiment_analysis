@@ -77,6 +77,7 @@ def train_model(left_wing_comments, right_wing_comments):
     comments, labels = combine_left_right_views(cleaned_left, cleaned_right)
     # get the training size needed
     training_size = int(len(comments) * TRAINING_VALIDATION_SPLIT)
+    print("Number of comments used for training the model: " + str(training_size))
     # split training data and labels according to the split specified in the comments
     training_comments = comments[0:training_size]
     testing_comments = comments[training_size:]

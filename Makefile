@@ -1,7 +1,11 @@
 install_dependencies:
-	pip3 install praw==7.1.4
-	pip3 install spark-nlp==2.7.3
-	pip3 install pyspark==2.4.7
+	pip3 install -r requirements.txt
 
 uninstall_dependancies:
-	pip3 uninstall praw
+	pip3 uninstall -r requirements.txt
+
+start_front_end:
+	python3 web_app/server.py
+
+start_back_end:
+	python3 src/main.py

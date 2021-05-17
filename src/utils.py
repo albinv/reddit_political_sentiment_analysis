@@ -56,14 +56,14 @@ def make_key():
 
 
 def quick_encrypt(msg):
-    # encrypt the msg using the key found in the comments
+    # encrypt the msg using the key found in the config
     encoded_msg = msg.encode()
     fernet = Fernet(SAFE_KEY)
     return fernet.encrypt(encoded_msg).decode("utf-8")
 
 
 def quick_decrypt(msg):
-    # decrypt the msg using the key found in the comments
+    # decrypt the msg using the key found in the config file
     encrypted = msg.encode()
     fernet = Fernet(SAFE_KEY)
     return fernet.decrypt(encrypted).decode("utf-8")
